@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import emailjs from '@emailjs/browser'
 import SEO from '../components/SEO'
 
 const Contact = () => {
@@ -27,16 +28,28 @@ const Contact = () => {
     setIsSubmitting(true)
     setSubmitStatus(null)
 
-    // For now, we'll use a simple alert. In production, integrate with Formspree or your backend
-    // Example Formspree integration:
-    // const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(formData),
-    // })
+    try {
+      // EmailJS configuration
+      // Replace these with your EmailJS credentials (see setup instructions)
+      const serviceID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID'
+      const templateID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID'
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
 
-    // Simulate API call
-    setTimeout(() => {
+      // Prepare email template parameters
+      const templateParams = {
+        to_email: 'sansika.sansikx@gmail.com',
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject,
+        phone: formData.phone || 'Not provided',
+        message: formData.message,
+        reply_to: formData.email,
+      }
+
+      // Send email using EmailJS
+      await emailjs.send(serviceID, templateID, templateParams, publicKey)
+
+      // Success
       setIsSubmitting(false)
       setSubmitStatus('success')
       setFormData({
@@ -47,10 +60,11 @@ const Contact = () => {
         message: '',
         agreeToTerms: false,
       })
-      
-      // In production, handle actual form submission
-      alert('Thank you for your message! We will get back to you soon.')
-    }, 1000)
+    } catch (error) {
+      console.error('Email sending failed:', error)
+      setIsSubmitting(false)
+      setSubmitStatus('error')
+    }
   }
 
   return (
@@ -205,6 +219,12 @@ const Contact = () => {
                 </div>
               )}
 
+              {submitStatus === 'error' && (
+                <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
+                  Sorry, there was an error sending your message. Please try again or contact us directly at sansika.sansikx@gmail.com
+                </div>
+              )}
+
               <div className="flex justify-end">
                 <button
                   type="submit"
@@ -235,7 +255,7 @@ const Contact = () => {
           <div className="max-w-6xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
             <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-shadow duration-300 hover:shadow-xl">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.835434509374!2d-122.4194154846814!3d37.774929279759!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c6c8f4459%3A0xb10ed6d9b5050fa5!2sSan%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2s!4v1234567890123!5m2!1sen!2s"
+                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3961.155495318717!2d79.87904137499602!3d6.8719644931267645!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNsKwNTInMTkuMSJOIDc5wrA1Mic1My44IkU!5e0!3m2!1sen!2slk!4v1763400355703!5m2!1sen!2slk"
                 width="100%"
                 height="450"
                 style={{ border: 0 }}

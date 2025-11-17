@@ -29,8 +29,12 @@ const Footer = () => {
               className="flex items-center space-x-2 mb-4 focus:outline-none focus:ring-2 focus:ring-primary rounded"
               aria-label="Tashiro Corporation Home"
             >
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">T</span>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden bg-white/0">
+                <img
+                  src="/assets/Tashiro-foods.webp"
+                  alt="Tashiro Corporation logo"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <span className="text-xl font-bold text-white">Tashiro Corporation</span>
             </Link>
