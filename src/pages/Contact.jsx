@@ -77,7 +77,7 @@ const Contact = () => {
       {/* Hero Section */}
       <section className="pt-32 pb-20 bg-gradient-to-br from-accent/20 to-primary/10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 animate-slide-up">
               Contact Us
             </h1>
@@ -255,7 +255,7 @@ const Contact = () => {
           <div className="max-w-6xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
             <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-shadow duration-300 hover:shadow-xl">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3961.155495318717!2d79.87904137499602!3d6.8719644931267645!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNsKwNTInMTkuMSJOIDc5wrA1Mic1My44IkU!5e0!3m2!1sen!2slk!4v1763400355703!5m2!1sen!2slk"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d247.57221485929833!2d79.88131165876895!3d6.871971402657663!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae25b002e3fa9bf%3A0xcd847a641f48a583!2sTashiro%20Corporation%20(Pvt)%20Ltd!5e0!3m2!1sen!2slk!4v1763485389686!5m2!1sen!2slk"
                 width="100%"
                 height="450"
                 style={{ border: 0 }}
@@ -270,35 +270,6 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary to-primary-dark text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="w-full h-full bg-gradient-to-br from-accent/20 to-primary/10" />
-        </div>
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6 animate-slide-up">
-            Let's Start Building Your Vision
-          </h2>
-          <p className="text-lg mb-8 max-w-2xl mx-auto opacity-90 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            Reach Out to Us for Expert Guidance, Collaborative Design, and Tailored Solutions to Shape 
-            Your Vision into Reality.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            <a
-              href="#contact-form"
-              className="bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-accent transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary hover:scale-105 transform"
-            >
-              Contact Us
-            </a>
-            <a
-              href="#contact-form"
-              className="bg-transparent text-white border-2 border-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary hover:scale-105 transform"
-            >
-              Book A Call
-            </a>
-          </div>
-        </div>
-      </section>
     </>
   )
 }

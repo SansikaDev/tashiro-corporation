@@ -1,9 +1,24 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useState, useEffect } from 'react'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import SEO from './components/SEO'
 import LoadingScreen from './components/LoadingScreen'
+
+// ScrollToTop component to scroll to top on route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    })
+  }, [pathname])
+
+  return null
+}
 
 // Lazy load pages for better performance
 const Home = lazy(() => import('./pages/Home'))
@@ -24,6 +39,13 @@ function App() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    // Scroll to top on page refresh/load
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    })
+
     // Preload critical resources
     const preloadImages = () => {
       const imageUrls = [
@@ -44,6 +66,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       {isLoading && <LoadingScreen onLoadComplete={handleLoadComplete} />}
       <div className={`flex flex-col min-h-screen transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         <SEO 

@@ -1,36 +1,152 @@
 import { Link } from 'react-router-dom'
-import React, { lazy, Suspense, useState } from 'react'
+import React, { lazy, Suspense, useState, useEffect } from 'react'
 import SEO from '../components/SEO'
 
 const AnimatedBackground = lazy(() => import('../components/AnimatedBackground'))
 
 const About = () => {
-  const TeamCard = ({ name, title, bio, imgSrc }) => {
+  const [currentDirector, setCurrentDirector] = useState(0)
+  const [animationDirection, setAnimationDirection] = useState('right')
+  const [touchStart, setTouchStart] = useState(null)
+  const [touchEnd, setTouchEnd] = useState(null)
+
+  // Minimum swipe distance (in px)
+  const minSwipeDistance = 50
+
+  const directors = [
+    {
+      name: "Mr. Yasunori Koto",
+      title: "President – Tashiro Corporation",
+      imgSrc: "https://images.unsplash.com/photo-1545996124-1f6a7f7f6b3f?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder",
+      bio: `It is my privilege to share this message as we continue to strengthen the vision and purpose of Tashiro Corporation—a venture founded on the partnership between Japan and Sri Lanka.\n\nOur mission is to build a corporation that unites Japanese innovation with Sri Lankan potential, while facilitating the export of high-quality Sri Lankan products to Japan. Through this initiative, we aim to introduce Sri Lanka's finest tea, ayurvedic items, food products, and other unique resources to the Japanese market with unwavering trust and quality.\n\nThis corporation is also deeply rooted in gratitude. The friendship between Japan and Sri Lanka has a remarkable history, especially during the J. R. Jayewardene era, when Sri Lanka played a significant role in supporting Japan on the international stage. That act of goodwill created a long-lasting bond between our nations—one that Japan continues to value and respect.\n\nThrough Tashiro Corporation, we honor that history by contributing to the continued strengthening of Japan–Sri Lanka relations. This effort is not only a business venture, but also a personal commitment to deepen the partnership that began decades ago.\n\nTogether with my Sri Lankan partners, we remain dedicated to working with honesty, respect, and mutual understanding—building a future of shared growth and meaningful cooperation between our two countries.`
+    },
+    {
+      name: "Mr. Saman Dharmasena",
+      title: "Director",
+      imgSrc: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder",
+      bio: "Mr. Saman Dharmasena brings local market expertise and strategic business development experience to Tashiro Corporation. He focuses on supply chain partnerships and export compliance for premium Sri Lankan products."
+    },
+    {
+      name: "Mr. Kapil Kodithuwakku",
+      title: "Director",
+      imgSrc: "https://images.unsplash.com/photo-1554151228-14d9def656e4?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder",
+      bio: "Mr. Kapil Kodithuwakku provides operational leadership and oversees quality control across our tea and ayurvedic product lines. He ensures products meet international standards."
+    }
+  ]
+
+  const directions = ['right', 'left', 'top', 'bottom']
+
+  // Auto-rotate every 1 minute (60000ms)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDirector((prev) => {
+        const nextIndex = (prev + 1) % directors.length
+        const nextDirection = directions[nextIndex % directions.length]
+        setAnimationDirection(nextDirection)
+        return nextIndex
+      })
+    }, 60000) // 1 minute
+
+    return () => clearInterval(interval)
+  }, []) // Empty dependency array since we use functional update
+
+  const nextDirector = () => {
+    const nextIndex = (currentDirector + 1) % directors.length
+    const nextDirection = directions[nextIndex % directions.length]
+    setAnimationDirection(nextDirection)
+    setCurrentDirector(nextIndex)
+  }
+
+  const prevDirector = () => {
+    const prevIndex = (currentDirector - 1 + directors.length) % directors.length
+    const prevDirection = directions[prevIndex % directions.length]
+    setAnimationDirection(prevDirection)
+    setCurrentDirector(prevIndex)
+  }
+
+  // Touch handlers for swipe
+  const onTouchStart = (e) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      nextDirector()
+    }
+    if (isRightSwipe) {
+      prevDirector()
+    }
+  }
+
+  const TeamCard = ({ name, title, bio, imgSrc, direction }) => {
     const [loaded, setLoaded] = useState(false)
+    
+    const getAnimationClass = () => {
+      switch(direction) {
+        case 'left':
+          return 'animate-slide-in-left'
+        case 'right':
+          return 'animate-slide-in-right'
+        case 'top':
+          return 'animate-slide-in-top'
+        case 'bottom':
+          return 'animate-slide-in-bottom'
+        default:
+          return 'animate-slide-in-right'
+      }
+    }
+
     return (
-      <div className="flex flex-col md:flex-row items-center gap-6 bg-white/90 p-6 rounded-xl shadow-sm hover:shadow-lg transition-all duration-700">
-        <div className="flex-shrink-0">
-          <div className="w-36 h-36 md:w-44 md:h-44 rounded-xl overflow-hidden bg-gray-100 shadow-sm ring-1 ring-accent/10">
-            <img
-              src={imgSrc}
-              alt={name}
-              loading="lazy"
-              onLoad={() => setLoaded(true)}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                transition: 'opacity 1.2s ease, transform 1.2s ease',
-                opacity: loaded ? 1 : 0,
-                transform: loaded ? 'scale(1)' : 'scale(1.03)'
-              }}
-            />
+      <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center ${getAnimationClass()}`}>
+        {/* Left Side - Text Content */}
+        <div className="space-y-4 md:space-y-6 order-2 md:order-1">
+          <div>
+            <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-3 md:mb-4 leading-tight">
+              {name}
+            </h3>
+            <p className="text-base sm:text-lg md:text-xl text-primary font-semibold mb-4 md:mb-6">{title}</p>
           </div>
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed whitespace-pre-line">
+            {bio}
+          </p>
         </div>
-        <div className="text-left">
-          <h3 className="text-xl font-semibold text-gray-900">{name}</h3>
-          <p className="text-sm text-primary font-medium mb-2">{title}</p>
-          <p className="text-gray-600 leading-relaxed max-w-xl whitespace-pre-line">{bio}</p>
+
+        {/* Right Side - Image with Decorative Elements */}
+        <div className="relative order-1 md:order-2">
+          <div className="relative w-full aspect-square max-w-md md:max-w-lg mx-auto">
+            {/* Main Image */}
+            <div className="relative w-full h-full rounded-xl md:rounded-2xl overflow-hidden shadow-xl md:shadow-2xl">
+              <img
+                src={imgSrc}
+                alt={name}
+                loading="lazy"
+                onLoad={() => setLoaded(true)}
+                className="w-full h-full object-cover"
+                style={{
+                  transition: 'opacity 1.2s ease, transform 1.2s ease',
+                  opacity: loaded ? 1 : 0,
+                  transform: loaded ? 'scale(1)' : 'scale(1.05)'
+                }}
+              />
+              {/* Overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            </div>
+            
+            {/* Decorative Blue Circle */}
+            <div className="absolute -bottom-4 -right-4 md:-bottom-8 md:-right-8 w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 bg-primary/20 rounded-full blur-2xl z-0" />
+            <div className="absolute -top-4 -left-4 md:-top-8 md:-left-8 w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32 bg-accent/30 rounded-full blur-xl z-0" />
+          </div>
         </div>
       </div>
     )
@@ -177,35 +293,71 @@ const About = () => {
       </section>
 
       {/* Board of Directors */}
-      <section className="py-16 bg-white">
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center mb-8 animate-slide-up">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Board of Directors</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">Leadership guiding Tashiro Corporation's Japan–Sri Lanka mission.</p>
+          <div className="max-w-7xl mx-auto text-center mb-12 animate-slide-up">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-4">Board of Directors</h2>
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Leadership guiding Tashiro Corporation's Japan–Sri Lanka mission.</p>
           </div>
 
-          <div className="max-w-4xl mx-auto space-y-6">
-            <TeamCard
-              name="Mr. Yasunori Koto"
-              title="President – Tashiro Corporation"
-              imgSrc="https://images.unsplash.com/photo-1545996124-1f6a7f7f6b3f?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder"
-              bio={`It is my privilege to share this message as we continue to strengthen the vision and purpose of Tashiro Corporation—a venture founded on the partnership between Japan and Sri Lanka.\n\nOur mission is to build a corporation that unites Japanese innovation with Sri Lankan potential, while facilitating the export of high-quality Sri Lankan products to Japan. Through this initiative, we aim to introduce Sri Lanka’s finest tea, ayurvedic items, food products, and other unique resources to the Japanese market with unwavering trust and quality.\n\nThis corporation is also deeply rooted in gratitude. The friendship between Japan and Sri Lanka has a remarkable history, especially during the J. R. Jayewardene era, when Sri Lanka played a significant role in supporting Japan on the international stage. That act of goodwill created a long-lasting bond between our nations—one that Japan continues to value and respect.\n\nThrough Tashiro Corporation, we honor that history by contributing to the continued strengthening of Japan–Sri Lanka relations. This effort is not only a business venture, but also a personal commitment to deepen the partnership that began decades ago.\n\nTogether with my Sri Lankan partners, we remain dedicated to working with honesty, respect, and mutual understanding—building a future of shared growth and meaningful cooperation between our two countries.`}
-            />
-            <TeamCard
-              name="Mr. Saman Dharmasena"
-              title="Director"
-              imgSrc="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder"
-              bio="Mr. Saman Dharmasena brings local market expertise and strategic business development experience to Tashiro Corporation. He focuses on supply chain partnerships and export compliance for premium Sri Lankan products."
-            />
+          <div className="max-w-7xl mx-auto relative px-8 md:px-0">
+            {/* Navigation Buttons */}
+            <button
+              onClick={prevDirector}
+              className="absolute left-0 md:-left-16 top-1/2 -translate-y-1/2 z-10 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:scale-110 transform group"
+              aria-label="Previous director"
+            >
+              <svg className="w-10 h-10 md:w-12 md:h-12 text-primary group-hover:text-primary-dark transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
 
-            <TeamCard
-              name="Mr. Kapil Kodithuwakku"
-              title="Director"
-              imgSrc="https://images.unsplash.com/photo-1554151228-14d9def656e4?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder"
-              bio="Mr. Kapil Kodithuwakku provides operational leadership and oversees quality control across our tea and ayurvedic product lines. He ensures products meet international standards."
-            />
+            <button
+              onClick={nextDirector}
+              className="absolute right-0 md:-right-16 top-1/2 -translate-y-1/2 z-10 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:scale-110 transform group"
+              aria-label="Next director"
+            >
+              <svg className="w-10 h-10 md:w-12 md:h-12 text-primary group-hover:text-primary-dark transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
 
-            
+            {/* Director Card */}
+            <div 
+              className="relative min-h-[400px] sm:min-h-[500px] md:min-h-[600px] touch-none md:touch-auto"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
+              <TeamCard
+                key={currentDirector}
+                name={directors[currentDirector].name}
+                title={directors[currentDirector].title}
+                imgSrc={directors[currentDirector].imgSrc}
+                bio={directors[currentDirector].bio}
+                direction={animationDirection}
+              />
+            </div>
+
+            {/* Dots Indicator */}
+            <div className="flex justify-center gap-3 mt-12">
+              {directors.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    const newDirection = directions[index % directions.length]
+                    setAnimationDirection(newDirection)
+                    setCurrentDirector(index)
+                  }}
+                  className={`h-3 rounded-full transition-all duration-300 ${
+                    index === currentDirector
+                      ? 'bg-primary w-10'
+                      : 'bg-gray-300 hover:bg-gray-400 w-3'
+                  }`}
+                  aria-label={`Go to director ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

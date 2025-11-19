@@ -103,34 +103,42 @@ const Header = () => {
         </div>
 
         {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden mt-4 pb-4 border-t border-gray-200">
-            <div className="flex flex-col space-y-2 pt-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`px-4 py-2 text-base font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary ${
-                    isActive(link.path)
-                      ? 'text-primary bg-accent/20'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                  aria-current={isActive(link.path) ? 'page' : undefined}
-                >
-                  {link.label}
-                </Link>
-              ))}
+        <div 
+          className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen 
+              ? 'max-h-96 opacity-100 mt-4 pb-4 border-t border-gray-200' 
+              : 'max-h-0 opacity-0 mt-0 pb-0 border-t-0'
+          }`}
+        >
+          <div className="flex flex-col space-y-2 pt-4">
+            {navLinks.map((link) => (
               <Link
-                to="/contact"
+                key={link.path}
+                to={link.path}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-dark text-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 mt-2"
+                className={`px-4 py-2 text-base font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-transform duration-200 ${
+                  isActive(link.path)
+                    ? 'text-primary bg-accent/20'
+                    : 'text-gray-700 hover:bg-gray-100'
+                } ${isMobileMenuOpen ? 'animate-slide-in-left' : ''}`}
+                style={isMobileMenuOpen ? { animationDelay: `${navLinks.indexOf(link) * 0.05}s` } : {}}
+                aria-current={isActive(link.path) ? 'page' : undefined}
               >
-                Contact Us
+                {link.label}
               </Link>
-            </div>
+            ))}
+            <Link
+              to="/contact"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-dark text-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 mt-2 transition-transform duration-200 ${
+                isMobileMenuOpen ? 'animate-slide-in-left' : ''
+              }`}
+              style={isMobileMenuOpen ? { animationDelay: `${navLinks.length * 0.05}s` } : {}}
+            >
+              Contact Us
+            </Link>
           </div>
-        )}
+        </div>
       </nav>
     </header>
   )

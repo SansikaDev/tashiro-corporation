@@ -35,7 +35,7 @@ const Home = () => {
         title="Tashiro Corporation - Expanding Horizons Beyond Tradition"
         description="Tashiro Corporation - Expanding beyond tofu into IT services, tea production, and international trade. Discover our vision for growth and innovation."
       />
-      
+
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
         {/* Video Background - Using a placeholder video URL, replace with your own */}
@@ -43,27 +43,26 @@ const Home = () => {
           videoSrc="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
           fallbackImage="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&h=1080&fit=crop"
         />
-        
+
         {/* Animated Particles Overlay */}
         <Suspense fallback={null}>
           <AnimatedBackground type="particles" color="#90EE90" intensity="medium" />
         </Suspense>
-        
+
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-block mb-6 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full animate-slide-up">
-            <span className="text-primary font-semibold text-sm">Beyond Tradition, We Build Dreams</span>
+            <span className="text-primary font-semibold text-sm">Innovating Today. Connecting Cultures. Powering Global Growth</span>
           </div>
-          
+
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            Architecture Designed for
-            <span className="block text-accent mt-2 animate-float">Life & Innovation</span>
+            Building Global Impact Through
+            <span className="block text-accent mt-2 animate-float">Technology & Trusted Exports</span>
           </h1>
-          
+
           <p className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto mb-8 leading-relaxed drop-shadow-lg animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            Where Creativity, Sustainability, and Innovation Merge to Shape Tomorrow's World through 
-            Timeless Design Excellence and Inspired Spaces Crafted for Today and Beyond
+            From cutting-edge digital solutions to premium Sri Lankan export products, Tashiro Corporation blends Japanese efficiency with Sri Lankan craftsmanship to create impact worldwide.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up" style={{ animationDelay: '0.3s' }}>
             <Link
               to="/about"
@@ -91,8 +90,7 @@ const Home = () => {
               About Tashiro Corporation
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed">
-              Crafting Timeless Spaces with Innovative Designs, Meticulous Attention to Detail, and a Passion 
-              for Sustainable Living to Inspire, Enrich, and Transform the Way We Experience Our Built Environment.
+              Tashiro Corporation is a Japan-Sri Lanka collaborative enterprise delivering high-quality IT solutions, premium Ceylon tea, and authentic Sri Lankan wellness products, built on innovation, global standards, and trusted partnerships.
             </p>
           </div>
 
@@ -105,14 +103,14 @@ const Home = () => {
                 <div className="transition-transform duration-300 hover:translate-x-2">
                   <h4 className="text-xl font-semibold text-primary mb-2">Vision to Reality</h4>
                   <p className="text-gray-600">
-                    Tashiro Corporation's Journey of Innovation. From our tofu heritage at Tashiro.jp, 
+                    Tashiro Corporation's Journey of Innovation. From our tofu heritage at Tashiro.jp,
                     we're expanding our horizons with architectural ingenuity and excellence.
                   </p>
                 </div>
                 <div className="transition-transform duration-300 hover:translate-x-2">
                   <h4 className="text-xl font-semibold text-primary mb-2">Building Dreams</h4>
                   <p className="text-gray-600">
-                    Pioneering Innovation, Collaborative Excellence, and Unwavering Commitment to Transforming 
+                    Pioneering Innovation, Collaborative Excellence, and Unwavering Commitment to Transforming
                     Visions into Timeless Realities.
                   </p>
                 </div>
@@ -150,7 +148,7 @@ const Home = () => {
               Our Expansion Opportunities
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Discover Our Creations: A Showcase of Inspiring Projects Reflecting Our Dedication to Innovation, 
+              Discover Our Creations: A Showcase of Inspiring Projects Reflecting Our Dedication to Innovation,
               Quality Craftsmanship, and Timeless Design in Architecture.
             </p>
           </div>
@@ -180,11 +178,10 @@ const Home = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
-                Discovering Architectural Mastery Evolution
+              Where Japanese Precision Meets Sri Lankan Heritage
               </h2>
               <p className="text-lg text-gray-600 mb-8">
-                Exploring the Intersection of Vision, Innovation, and Craftsmanship to deliver exceptional 
-                results and exceed expectations.
+              Where visionary ideas, world-class IT solutions, and premium export standards come together to deliver exceptional value.
               </p>
               <div className="grid grid-cols-2 gap-6">
                 <div>
@@ -245,7 +242,7 @@ const Home = () => {
             Let's Start Building Your Vision
           </h2>
           <p className="text-lg sm:text-xl mb-8 max-w-2xl mx-auto opacity-90">
-            Reach Out to Us for Expert Guidance, Collaborative Design, and Tailored Solutions to Shape 
+            Reach Out to Us for Expert Guidance, Collaborative Design, and Tailored Solutions to Shape
             Your Vision into Reality.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -1,11 +1,22 @@
 import { Link } from 'react-router-dom'
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import SEO from '../components/SEO'
 import Card from '../components/Card'
 
 const AnimatedBackground = lazy(() => import('../components/AnimatedBackground'))
 
 const TeaServices = () => {
+  const [clickedCard, setClickedCard] = useState(null)
+  const [isClosing, setIsClosing] = useState(false)
+
+  const handleClose = () => {
+    setIsClosing(true)
+    setTimeout(() => {
+      setClickedCard(null)
+      setIsClosing(false)
+    }, 300) // Match animation duration
+  }
+
   const services = [
     {
       title: 'Tea Production',
@@ -46,13 +57,21 @@ const TeaServices = () => {
         description="Tashiro Tea Services specializes in premium tea production, distribution, and related services, bringing the finest tea experiences to customers worldwide."
       />
 
+      {/* Full page backdrop blur overlay - appears when any card is clicked */}
+      {clickedCard !== null && (
+        <div 
+          className={`fixed inset-0 bg-black/30 backdrop-blur-md z-40 transition-opacity duration-300 ${isClosing ? 'opacity-0' : 'opacity-100 animate-fade-in'}`}
+          onClick={handleClose}
+        />
+      )}
+
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 bg-gradient-to-br from-accent/20 to-primary/10 overflow-hidden">
+      <section className={`relative pt-32 pb-20 bg-gradient-to-br from-accent/20 to-primary/10 overflow-hidden transition-all duration-300 ${clickedCard !== null ? 'blur-sm' : ''}`}>
         <Suspense fallback={null}>
           <AnimatedBackground type="tea" color="#228B22" intensity="medium" />
         </Suspense>
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 animate-slide-up">
               Tea Services
             </h1>
@@ -60,7 +79,7 @@ const TeaServices = () => {
               Explore Our Expertise: Elevating Spaces. Enriching Lives, and Bringing Your Vision to Life 
               with Our Comprehensive Range of Premium Tea Production and Distribution Services.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style={{ animationDelay: '0.2s' }}>
               <Link
                 to="/contact"
                 className="bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-dark transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:scale-105 transform"
@@ -94,22 +113,66 @@ const TeaServices = () => {
             {services.map((service, index) => (
               <div
                 key={service.title}
-                className="animate-slide-up"
+                className={`animate-slide-up relative transition-all duration-300 cursor-pointer ${clickedCard !== null && clickedCard !== index ? 'blur-sm opacity-50' : ''}`}
                 style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={() => setClickedCard(index)}
               >
-                <Card
-                  title={service.title}
-                  description={service.description}
-                  image={service.image}
-                />
+                <div className="relative z-10">
+                  <Card
+                    title={service.title}
+                    description={service.description}
+                    image={service.image}
+                  />
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
+      
+      {/* Click Popup Modal - appears when a card is clicked - positioned outside sections to appear on top */}
+      {clickedCard !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+          <div 
+            className={`bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative pointer-events-auto ${
+              isClosing ? 'animate-fade-out-down' : 'opacity-0 animate-fade-in-up'
+            }`}
+            style={!isClosing ? { animationDelay: '0.15s', animationFillMode: 'forwards' } : {}}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={handleClose}
+              className="absolute top-4 right-4 w-10 h-10 bg-black rounded-full flex items-center justify-center text-white hover:bg-gray-800 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              aria-label="Close popup"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            <div className="flex flex-col md:flex-row p-6 md:p-8 gap-6 md:gap-8">
+              {/* Description on Left */}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{services[clickedCard].title}</h3>
+                <p className="text-lg text-gray-600 leading-relaxed">{services[clickedCard].description}</p>
+              </div>
+              {/* Image on Right */}
+              <div className="flex-1 min-w-0">
+                <img
+                  src={services[clickedCard].image}
+                  alt={services[clickedCard].title}
+                  className="w-full h-64 md:h-80 object-cover rounded-lg"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Features Section */}
-      <section className="py-20 bg-gradient-to-br from-accent/10 to-primary/5">
+      <section className={`py-20 bg-gradient-to-br from-accent/10 to-primary/5 transition-all duration-300 ${clickedCard !== null ? 'blur-sm' : ''}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="relative order-2 md:order-1 animate-slide-up group" style={{ animationDelay: '0.1s' }}>
@@ -149,7 +212,7 @@ const TeaServices = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary to-primary-dark text-white relative overflow-hidden">
+      <section className={`py-20 bg-gradient-to-r from-primary to-primary-dark text-white relative overflow-hidden transition-all duration-300 ${clickedCard !== null ? 'blur-sm' : ''}`}>
         <div className="absolute inset-0 opacity-10">
           <Suspense fallback={null}>
             <AnimatedBackground type="particles" color="#FFFFFF" intensity="low" />
